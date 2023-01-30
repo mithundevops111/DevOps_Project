@@ -18,3 +18,4 @@
 		<a href="${messageUrl}">Click to close</a>
 	</body>
 </html>
+
