@@ -1,35 +1,27 @@
-// Declarative //
-
 pipeline {
     agent any
+    tools{
+        mvn "maven"
+    }
 
     stages {
-        stage('Build') {
+        stage('Git Clone') {
             steps {
-                echo 'Building..'
+                echo 'Cloning the source code from Github'
+                git credentialsId: 'github', url: 'https://github.com/mithundevops111/DevOps_Project.git'
             }
         }
-        stage('Test') {
+        stage('Maven Build') {
             steps {
-                echo 'Testing..'
+                echo 'Build using Maven Tool'
+                sh 'mvn package'
             }
         }
-        stage('Deploy') {
+        stage('Tomcat Deployment') {
             steps {
-                echo 'Deploying....'
+                echo 'Tomcat Deployment'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat9', path: '', url: 'http://18.117.123.161:8080')], contextPath: null, war: '*/*.war'
             }
         }
-    }
-}
-// Script //
-node {
-    stage('Build') {
-        echo 'Building....'
-    }
-    stage('Test') {
-        echo 'Building....'
-    }
-    stage('Deploy') {
-        echo 'Deploying....'
     }
 }
